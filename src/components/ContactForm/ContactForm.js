@@ -1,12 +1,12 @@
 import { Formik, Field, Form } from 'formik';
 import { nanoid } from 'nanoid';
-import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactSlice';
-import { getContacts } from 'redux/selector';
+import { selectContacts } from 'redux/selector';
+import css from './ContactForm.module.css';
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {

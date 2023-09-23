@@ -1,24 +1,29 @@
-import { Formik, Field, Form } from 'formik';
-import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactSlice';
-import { selectContacts } from 'redux/selector';
 import css from './ContactForm.module.css';
+import { Formik, Field, Form } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selector';
+import { addContact } from 'redux/operations';
 
 export const ContactForm = () => {
   const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
-  const handleSubmit = (values, actions) => {
-    const isExist = contacts.find(
-      contact => contact.name.toLowerCase() === values.name.toLowerCase()
+  const isContactExist = name => {
+    return contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
     );
-    if (isExist) {
-      alert(`${values.name} is already in contacts.`);
+  };
+
+  const handleSubmit = (values, { resetForm }) => {
+    const { name, number } = values;
+
+    if (isContactExist(name)) {
+      alert(`${name} is already in contacts.`);
     } else {
-      dispatch(addContact({ ...values }));
+      dispatch(addContact({ name, number }));
     }
-    actions.resetForm();
+
+    resetForm();
   };
 
   return (
